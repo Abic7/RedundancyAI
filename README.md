@@ -444,3 +444,29 @@ Apache License 2.0 — See LICENSE file
 
 **Last Updated:** 21 July 2026  
 **Build Status:** Phase 1 Complete, MVP In Progress
+
+---
+
+## 📊 Architecture Diagrams
+
+**New in v1.0:** Comprehensive architecture diagrams for system design, deployment, and security.
+
+Five professional `.drawio` diagrams are included:
+1. **System Architecture** — 5-layer pipeline with all components
+2. **Data Flow** — Step-by-step execution with performance metrics
+3. **Security Defense** — 6-layer protection stack
+4. **Component Dependencies** — Module-level architecture
+5. **Deployment Architecture** — v1.0 local setup + v2.0 roadmap
+
+**Open them:**
+- Online: https://app.diagrams.net/ → File → Open → select `.drawio` file
+- Desktop: Download draw.io, double-click any `.drawio` file
+- Guide: See `DIAGRAMS_GUIDE.md` for detailed instructions
+
+**Export to:**
+- PNG (embedded XML, stays editable in draw.io)
+- SVG (vector, scales perfectly)
+- PDF (print-friendly)
+
+See `diagrams/README.md` for descriptions and use cases.
+
