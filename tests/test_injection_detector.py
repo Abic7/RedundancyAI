@@ -1,9 +1,14 @@
-"""Tests for prompt injection detector."""
+"""Tests for prompt injection detector.
+
+Unit tests that don't require external services.
+Run with: pytest tests/test_injection_detector.py -v
+"""
 
 import pytest
 from src.injection_detector import PromptInjectionDetector, InjectionThreatLevel
 
 
+@pytest.mark.unit
 class TestInjectionDetector:
     """Test injection detection."""
 

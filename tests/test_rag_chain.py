@@ -32,7 +32,8 @@ GOLDEN_QUESTIONS = [
 ]
 
 
-@pytest.mark.skip(reason="Phase 5 in progress - full test suite coming")
+@pytest.mark.e2e
+@pytest.mark.skip(reason="E2E tests require LM Studio at http://localhost:1234")
 def test_rag_chain_golden_questions():
     """Test RAG chain on golden questions."""
     from src.rag_chain import create_rag_chain
@@ -52,7 +53,8 @@ def test_rag_chain_golden_questions():
     assert passed / len(GOLDEN_QUESTIONS) >= 0.8, f"Golden questions pass rate too low: {passed}/{len(GOLDEN_QUESTIONS)}"
 
 
-@pytest.mark.skip(reason="Phase 5 in progress")
+@pytest.mark.unit
+@pytest.mark.skip(reason="Moved to test_injection_detector.py")
 def test_injection_detection():
     """Test injection detection."""
     from src.injection_detector import PromptInjectionDetector
@@ -70,7 +72,8 @@ def test_injection_detection():
         assert result["is_blocked"], f"Failed to block: {pattern}"
 
 
-@pytest.mark.skip(reason="Phase 5 in progress")
+@pytest.mark.unit
+@pytest.mark.skip(reason="Moved to test_output_processor.py")
 def test_citation_validation():
     """Test citation validation."""
     from src.output_processor import OutputProcessor

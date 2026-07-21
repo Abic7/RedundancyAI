@@ -1,4 +1,8 @@
-"""End-to-end tests for complete RAG pipeline."""
+"""End-to-end tests for complete RAG pipeline.
+
+Note: These tests require LM Studio running at http://localhost:1234
+They are marked as skip by default and only run in development.
+"""
 
 import pytest
 import json
@@ -40,7 +44,8 @@ GOLDEN_QUESTIONS = [
 ]
 
 
-@pytest.mark.skip(reason="E2E tests require LM Studio running")
+@pytest.mark.e2e
+@pytest.mark.skip(reason="E2E tests require LM Studio running at http://localhost:1234")
 class TestRAGPipeline:
     """Test complete RAG pipeline."""
 
@@ -117,7 +122,8 @@ class TestRAGPipeline:
             assert field in response, f"Missing field: {field}"
 
 
-@pytest.mark.skip(reason="Integration tests require LM Studio")
+@pytest.mark.integration
+@pytest.mark.skip(reason="Integration tests require LM Studio at http://localhost:1234")
 class TestOutputQuality:
     """Test output quality metrics."""
 

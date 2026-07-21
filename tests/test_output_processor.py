@@ -1,10 +1,14 @@
-"""Tests for output processor and citation validation."""
+"""Tests for output processor and citation validation.
+
+Unit tests that don't require external services.
+Run with: pytest tests/test_output_processor.py -v
+"""
 
 import pytest
-from langchain_core.documents import Document
 from src.output_processor import OutputProcessor
 
 
+@pytest.mark.unit
 class TestCitationExtraction:
     """Test citation extraction from answer text."""
 
@@ -33,6 +37,7 @@ class TestCitationExtraction:
         assert citations == ["FWO_Redundancy_Pay"]
 
 
+@pytest.mark.unit
 class TestCitationValidation:
     """Test citation validation against retrieved chunks."""
 
@@ -89,6 +94,7 @@ class TestCitationValidation:
         assert "Fake_Source" in result["invalid_citations"]
 
 
+@pytest.mark.unit
 class TestUnsourcedClaims:
     """Test detection of factual claims without citations."""
 
@@ -113,6 +119,7 @@ class TestUnsourcedClaims:
         assert result["has_unsourced_claims"] is False
 
 
+@pytest.mark.unit
 class TestResponseFormatting:
     """Test structured response formatting."""
 
