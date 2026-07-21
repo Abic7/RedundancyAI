@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="draw.io" modified="2026-07-21T00:00:00.000Z" agent="Claude Code" version="24.0" type="device">
+  <diagram id="system-arch" name="System Architecture">
+    <mxGraphModel dx="1200" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Layer 1: Ingestion (Orange) -->
+        <mxCell id="layer1" value="LAYER 1: DATA INGESTION" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#FF8C00;strokeWidth=3;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="1360" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="docs" value="Fair Work Documents&#10;5 source files&#10;(PDF, TXT, CSV)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff9e6;strokeColor=#FF8C00;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="40" y="50" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ingest" value="📥 Ingestion&#10;PyPDF2 + BeautifulSoup4&#10;Metadata extraction" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff9e6;strokeColor=#FF8C00;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="220" y="50" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="chunk" value="✂️ Chunking&#10;700 words + 100 overlap&#10;→ 949 chunks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff9e6;strokeColor=#FF8C00;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="400" y="50" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="embed" value="🔢 Embeddings&#10;BAAI/bge-large-en-v1.5&#10;1024-dim vectors" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff9e6;strokeColor=#FF8C00;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="580" y="50" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="vstore" value="💾 Vector Store&#10;Chroma (in-process)&#10;~500MB persisted" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff9e6;strokeColor=#FF8C00;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="760" y="50" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Edges Layer 1 -->
+        <mxCell id="e1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#FF8C00;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="docs" target="ingest">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#FF8C00;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="ingest" target="chunk">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#FF8C00;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="chunk" target="embed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#FF8C00;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="embed" target="vstore">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Layer 2: Retrieval & Safety (Blue) -->
+        <mxCell id="layer2" value="LAYER 2: RETRIEVAL &amp; SAFETY" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#CCE5FF;strokeColor=#0055CC;strokeWidth=3;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="20" y="180" width="1360" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="q_input" value="❓ User Question" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6f2ff;strokeColor=#0055CC;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="40" y="210" width="120" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="inj_det" value="🛡️ Injection Detection&#10;9 patterns blocked&#10;System/rule/persona" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6f2ff;strokeColor=#0055CC;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="190" y="210" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sim_search" value="🔍 Similarity Search&#10;Top-8 chunks&#10;&lt;100ms latency" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6f2ff;strokeColor=#0055CC;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="360" y="210" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="conf_gate" value="🚪 Confidence Gate&#10;Min: 0.25 threshold&#10;Empirically tuned" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6f2ff;strokeColor=#0055CC;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="530" y="210" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rerank" value="📊 Reranking&#10;Cross-encoder scores&#10;Top-3 kept" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6f2ff;strokeColor=#0055CC;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="700" y="210" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Edges Layer 2 -->
+        <mxCell id="e5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0055CC;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="q_input" target="inj_det">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0055CC;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="inj_det" target="sim_search">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0055CC;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="sim_search" target="conf_gate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0055CC;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="conf_gate" target="rerank">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Layer 3: LLM Processing (Green) -->
+        <mxCell id="layer3" value="LAYER 3: LLM PROCESSING" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#D4EDDA;strokeColor=#28A745;strokeWidth=3;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="20" y="340" width="1360" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="fmt" value="📝 Context Format&#10;[Source: X] tags&#10;Inline citations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#28A745;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="40" y="370" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="prompt" value="💬 System Prompt&#10;Citation enforcement&#10;Refuse hallucinations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#28A745;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="220" y="370" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="llm" value="🤖 LLM Inference&#10;LM Studio&#10;Gemma-4-12B&#10;3-5 sec latency" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#28A745;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="400" y="370" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="resp" value="✍️ LLM Response&#10;Generated answer&#10;with citations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#28A745;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="580" y="370" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Edges Layer 3 -->
+        <mxCell id="e9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#28A745;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="fmt" target="prompt">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#28A745;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="prompt" target="llm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#28A745;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="llm" target="resp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Layer 4: Output Validation (Purple) -->
+        <mxCell id="layer4" value="LAYER 4: OUTPUT VALIDATION" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E7D4F5;strokeColor=#6F42C1;strokeWidth=3;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="20" y="500" width="1360" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cite_ext" value="📋 Citation Extract&#10;Regex: [Source: X]&#10;Extract all citations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6F42C1;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="40" y="530" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cite_ver" value="✅ Citation Verify&#10;Match against&#10;retrieved chunks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6F42C1;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="220" y="530" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="halluc" value="🚨 Hallucination Detect&#10;Check for unsourced&#10;factual claims" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6F42C1;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="400" y="530" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="final" value="🎯 Final Output&#10;Answer + sources&#10;+ confidence score" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6F42C1;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="580" y="530" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Edges Layer 4 -->
+        <mxCell id="e12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#6F42C1;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="cite_ext" target="cite_ver">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#6F42C1;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="cite_ver" target="halluc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#6F42C1;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="halluc" target="final">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Layer 5: UI (Yellow) -->
+        <mxCell id="layer5" value="LAYER 5: USER INTERFACE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFACD;strokeColor=#DAA520;strokeWidth=3;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="20" y="660" width="1360" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ui" value="💻 Streamlit Chat&#10;Message history&#10;Interactive input" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffbf0;strokeColor=#DAA520;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="40" y="690" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="conf_ind" value="🎨 Confidence Indicator&#10;🟢 High / 🟡 Med / 🔴 Low" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffbf0;strokeColor=#DAA520;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="220" y="690" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="src" value="📖 Source Attribution&#10;Retrieved documents&#10;with links" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffbf0;strokeColor=#DAA520;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="400" y="690" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="warn" value="⚠️ Safety Warnings&#10;Injection detected&#10;Hallucination flagged" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffbf0;strokeColor=#DAA520;strokeWidth=2;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="580" y="690" width="140" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Edges Layer 5 -->
+        <mxCell id="e15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#DAA520;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="ui" target="conf_ind">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#DAA520;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="conf_ind" target="src">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#DAA520;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="src" target="warn">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Cross-layer connections -->
+        <mxCell id="e_vstore_search" value="retrieve" style="dashed;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#999;strokeWidth=1;" edge="1" parent="1" source="vstore" target="sim_search">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="830" y="170" as="sourcePoint" />
+            <mxPoint x="430" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e_rerank_fmt" value="context" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="rerank" target="fmt">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="770" y="300" as="sourcePoint" />
+            <mxPoint x="110" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e_resp_cite" value="answer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="resp" target="cite_ext">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="650" y="460" as="sourcePoint" />
+            <mxPoint x="110" y="530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e_final_ui" value="display" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="final" target="ui">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="650" y="620" as="sourcePoint" />
+            <mxPoint x="110" y="690" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
