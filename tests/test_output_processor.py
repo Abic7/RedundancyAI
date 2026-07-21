@@ -1,7 +1,7 @@
 """Tests for output processor and citation validation."""
 
 import pytest
-from langchain.schema import Document
+from langchain_core.documents import Document
 from src.output_processor import OutputProcessor
 
 
@@ -40,14 +40,16 @@ class TestCitationValidation:
         """All citations match retrieved chunks."""
         answer = "Pay is 4 weeks [Source: FWO_Redundancy_Pay] and notice is required [Source: NES_Summary]."
         chunks = [
-            Document(
-                page_content="Redundancy pay is 4 weeks...",
-                metadata={"source_name": "FWO_Redundancy_Pay", "doc_type": "factsheet"}
-            ),
-            Document(
-                page_content="Notice period is...",
-                metadata={"source_name": "NES_Summary", "doc_type": "guide"}
-            ),
+            {
+                "source": "FWO_Redundancy_Pay",
+                "content": "Redundancy pay is 4 weeks...",
+                "metadata": {"source_name": "FWO_Redundancy_Pay", "doc_type": "factsheet"}
+            },
+            {
+                "source": "NES_Summary",
+                "content": "Notice period is...",
+                "metadata": {"source_name": "NES_Summary", "doc_type": "guide"}
+            },
         ]
 
         result = OutputProcessor.validate_citations(answer, chunks)
@@ -58,10 +60,11 @@ class TestCitationValidation:
         """Detect hallucinated citations."""
         answer = "Answer [Source: Made_Up_Document]."
         chunks = [
-            Document(
-                page_content="Some content",
-                metadata={"source_name": "FWO_Redundancy_Pay", "doc_type": "factsheet"}
-            ),
+            {
+                "source": "FWO_Redundancy_Pay",
+                "content": "Some content",
+                "metadata": {"source_name": "FWO_Redundancy_Pay", "doc_type": "factsheet"}
+            },
         ]
 
         result = OutputProcessor.validate_citations(answer, chunks)
@@ -73,10 +76,11 @@ class TestCitationValidation:
         """Detect mixed valid and invalid citations."""
         answer = "Valid [Source: FWO_Redundancy_Pay] and invalid [Source: Fake_Source]."
         chunks = [
-            Document(
-                page_content="Content",
-                metadata={"source_name": "FWO_Redundancy_Pay", "doc_type": "factsheet"}
-            ),
+            {
+                "source": "FWO_Redundancy_Pay",
+                "content": "Content",
+                "metadata": {"source_name": "FWO_Redundancy_Pay", "doc_type": "factsheet"}
+            },
         ]
 
         result = OutputProcessor.validate_citations(answer, chunks)
@@ -116,14 +120,15 @@ class TestResponseFormatting:
         """Format complete response with all fields."""
         answer = "Redundancy pay is 4 weeks [Source: FWO_Redundancy_Pay]."
         chunks = [
-            Document(
-                page_content="Redundancy pay...",
-                metadata={
+            {
+                "source": "FWO_Redundancy_Pay",
+                "content": "Redundancy pay...",
+                "metadata": {
                     "source_name": "FWO_Redundancy_Pay",
                     "doc_type": "factsheet",
                     "url": "https://example.com/fwo"
                 }
-            ),
+            },
         ]
         validation = {
             "valid": True,
