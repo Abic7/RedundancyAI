@@ -38,7 +38,7 @@ Raw Fair Work Documents (PDFs, TXT, CSV)
 [RAG CHAIN - LCEL]
   • Input: question (user)
   • Format: inline source tags in context
-  • LLM Call: Ollama (Qwen-2.5 or Llama-2)
+  • LLM Call: LM Studio (Qwen-2.5 or Llama-2)
   • Model receives: system prompt + context + question
     ↓
 [OUTPUT PROCESSING]
@@ -249,7 +249,7 @@ Log:
 |--------|-------------|------------|
 | **Chroma** | Pinecone, Weaviate | Lightweight, local, free, no external dependencies |
 | **sentence-transformers** | OpenAI embeddings | Free, offline, privacy-first, good quality |
-| **Ollama** | Claude API, OpenAI | Offline, no costs, full control, easily swappable |
+| **LM Studio** | Claude API, OpenAI | Offline, no costs, full control, better UX than Ollama |
 | **Streamlit** | FastAPI + React | Fast iteration for MVP, no frontend needed |
 | **LCEL** | Custom chains | Declarative, composable, easy to test |
 | **Regex injection detection** | ML-based | Fast, deterministic, no training required |
@@ -375,7 +375,7 @@ Log:
 ### Local Development
 ```bash
 # All components run locally
-# Ollama: http://localhost:11434
+# LM Studio: http://localhost:1234 (or configure in .env)
 # Chroma: data/processed/chroma_db/ (file-based)
 # Streamlit: http://localhost:8501
 ```
@@ -385,7 +385,7 @@ Log:
 API Service: FastAPI on port 8000
 Database: PostgreSQL for state
 Cache: Redis for embeddings
-LLM: Claude API (or local Ollama)
+LLM: Claude API (or local LM Studio)
 Frontend: React on port 3000
 Monitoring: Prometheus + Grafana
 ```

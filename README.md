@@ -85,10 +85,12 @@ Fair Work Documents (PDFs + Text)
 
 - Python 3.11+
 - 4GB RAM (minimum)
-- Ollama running locally with Qwen-2.5 or Llama-2 loaded
+- LM Studio running locally with Qwen-2.5 or Llama-2 loaded
   ```bash
-  ollama pull qwen2.5:7b-instruct
-  ollama serve  # Runs on http://localhost:11434
+  # Download and install LM Studio from https://lmstudio.ai
+  # Load a model (e.g., Qwen-2.5-7B-Instruct)
+  # Start the local server: LM Studio → Local Server → Start
+  # Runs on http://localhost:1234 (or configure in .env)
   ```
 
 ---
@@ -97,7 +99,7 @@ Fair Work Documents (PDFs + Text)
 
 | Component | Technology |
 |-----------|------------|
-| LLM | Ollama + Qwen-2.5 (or Llama-2) |
+| LLM | LM Studio + Qwen-2.5 (or Llama-2) |
 | Embeddings | sentence-transformers (BAAI/bge-large-en-v1.5) |
 | Vector DB | Chroma |
 | RAG Framework | LangChain + LCEL |
@@ -155,10 +157,11 @@ Fair Work Documents (PDFs + Text)
 - No frontend code needed
 - Migration path to FastAPI for v2.0
 
-### Why Ollama (not cloud LLM)?
+### Why LM Studio (not cloud LLM)?
 - Offline inference, no API costs
 - Full control, no data leaves machine
 - Can swap models easily
+- Better UX than Ollama for Mac/Windows/Linux
 
 See `ARCHITECTURE_DECISIONS.md` for more.
 
@@ -329,17 +332,17 @@ Open an issue with:
 
 ## Troubleshooting
 
-**Q: Ollama not responding**
+**Q: LM Studio not responding**
 ```bash
-# Check if Ollama is running
-curl http://localhost:11434/api/tags
+# Check if LM Studio server is running
+curl http://localhost:1234/api/tags
 
-# Start Ollama
-ollama serve
+# Start LM Studio
+# Open LM Studio app → Local Server → Start Server
 ```
 
 **Q: Low confidence scores**
-- Check if Ollama model is loaded: `ollama list`
+- Check if LM Studio model is loaded and server is running
 - Try larger model (13B+ instead of 7B)
 - Check document quality: `python -m src.ingest`
 
