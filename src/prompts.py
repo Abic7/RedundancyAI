@@ -1,6 +1,6 @@
 """Prompt templates for RedundancyAI RAG chain."""
 
-from langchain.prompts import PromptTemplate
+from langchain_core.prompts import PromptTemplate
 
 # System prompt for RAG chain with citation enforcement
 SYSTEM_PROMPT = """You are a legal reference assistant for Australian Fair Work entitlements.

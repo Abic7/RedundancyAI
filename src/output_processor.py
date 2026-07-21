@@ -2,7 +2,6 @@
 
 import re
 from typing import Optional
-from langchain.schema import Document
 
 from src.logger import setup_logger
 
@@ -33,14 +32,14 @@ class OutputProcessor:
 
     @staticmethod
     def validate_citations(
-        answer_text: str, retrieved_chunks: list[Document]
+        answer_text: str, retrieved_chunks: list
     ) -> dict:
         """
         Validate that all citations in answer match retrieved chunks.
 
         Args:
             answer_text: The LLM-generated answer
-            retrieved_chunks: List of chunks returned from retrieval
+            retrieved_chunks: List of chunks (dicts with metadata) from RAGChain
 
         Returns:
             Validation result dict with:
@@ -52,12 +51,15 @@ class OutputProcessor:
         # Extract citations from answer
         cited_sources = OutputProcessor.extract_citations(answer_text)
 
-        # Get sources from retrieved chunks
-        retrieved_sources = [
-            chunk.metadata.get("source_name")
-            for chunk in retrieved_chunks
-            if chunk.metadata.get("source_name")
-        ]
+        # Get sources from retrieved chunks (handle both dict and Document formats)
+        retrieved_sources = []
+        for chunk in retrieved_chunks:
+            if isinstance(chunk, dict):
+                source = chunk.get("source")
+            else:
+                source = chunk.metadata.get("source_name")
+            if source:
+                retrieved_sources.append(source)
         retrieved_sources = list(set(retrieved_sources))  # Unique sources
 
         # Check: are all cited sources in retrieved sources?
@@ -85,7 +87,7 @@ class OutputProcessor:
     @staticmethod
     def format_response(
         answer: str,
-        retrieved_chunks: list[Document],
+        retrieved_chunks: list,
         confidence: float,
         validation_result: dict,
     ) -> dict:
@@ -94,7 +96,7 @@ class OutputProcessor:
 
         Args:
             answer: The LLM-generated answer text
-            retrieved_chunks: List of retrieved chunks used
+            retrieved_chunks: List of retrieved chunks (dicts with metadata)
             confidence: Confidence score (0-1)
             validation_result: Citation validation results
 
@@ -106,13 +108,20 @@ class OutputProcessor:
         seen_sources = set()
 
         for chunk in retrieved_chunks:
-            source_name = chunk.metadata.get("source_name")
+            source_name = chunk.get("source") if isinstance(chunk, dict) else chunk.metadata.get("source_name")
             if source_name and source_name not in seen_sources:
-                sources.append({
-                    "name": source_name,
-                    "doc_type": chunk.metadata.get("doc_type", "unknown"),
-                    "url": chunk.metadata.get("url", ""),
-                })
+                if isinstance(chunk, dict):
+                    sources.append({
+                        "name": source_name,
+                        "doc_type": chunk.get("metadata", {}).get("doc_type", "unknown"),
+                        "url": chunk.get("metadata", {}).get("url", ""),
+                    })
+                else:
+                    sources.append({
+                        "name": source_name,
+                        "doc_type": chunk.metadata.get("doc_type", "unknown"),
+                        "url": chunk.metadata.get("url", ""),
+                    })
                 seen_sources.add(source_name)
 
         response = {
@@ -128,6 +137,56 @@ class OutputProcessor:
         }
 
         return response
+
+    def process_output(
+        self,
+        llm_output: str,
+        retrieved_chunks: list,
+        question: str,
+    ) -> dict:
+        """
+        Process LLM output: extract & validate citations, detect hallucinations.
+
+        Args:
+            llm_output: Raw output from LLM
+            retrieved_chunks: List of retrieved chunks (dicts)
+            question: Original user question
+
+        Returns:
+            Processed output dict with answer, sources, validation results
+        """
+        logger.info("Processing LLM output...")
+
+        # Validate citations
+        validation = self.validate_citations(llm_output, retrieved_chunks)
+
+        # Check for unsourced claims
+        unsourced = self.check_for_unsourced_claims(llm_output)
+
+        # Detect hallucination if:
+        # 1. Invalid citations exist (cited sources not in retrieved chunks)
+        # 2. Unsourced claims with fact indicators detected
+        hallucination_detected = (
+            validation["hallucination_detected"] or unsourced["has_unsourced_claims"]
+        )
+
+        if hallucination_detected:
+            if validation["invalid_citations"]:
+                logger.warning(f"Hallucination detected: invalid citations {validation['invalid_citations']}")
+            if unsourced["unsourced_facts"]:
+                logger.warning(f"Hallucination detected: unsourced claims")
+
+        return {
+            "answer": llm_output,
+            "sources": [
+                {"name": chunk.get("source"), "chunk": chunk.get("content", "")[:200]}
+                for chunk in retrieved_chunks
+            ],
+            "hallucination_detected": hallucination_detected,
+            "validation": validation,
+            "unsourced_claims": unsourced,
+            "unverified_citations": len(validation.get("invalid_citations", [])),
+        }
 
     @staticmethod
     def check_for_unsourced_claims(answer_text: str) -> dict:
