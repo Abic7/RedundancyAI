@@ -1,0 +1,36 @@
+[
+  {
+    "source_name": "FWO_Redundancy_Pay",
+    "filename": "fwo_redundancy_pay.pdf",
+    "status": "failed",
+    "error": "404 Client Error: Not Found for url: https://www.fairwork.gov.au/documents-and-publications/fact-sheets-and-templates/fact-sheets/minimum-wages-and-conditions/redundancy-pay"
+  },
+  {
+    "source_name": "NES_Summary",
+    "filename": "nes_summary.pdf",
+    "status": "failed",
+    "error": "404 Client Error: Not Found for url: https://www.fairwork.gov.au/workplace-rights/national-employment-standards"
+  },
+  {
+    "source_name": "FWA_Section_122",
+    "filename": "fair_work_act_excerpt.txt",
+    "status": "downloaded",
+    "checksum": "326bf99ce2a1dea2146a535d1a4d8843298c92e81cf8597861fc673069dff584",
+    "size_kb": 81.6279296875,
+    "downloaded_at": "2026-07-21T13:33:22.109278"
+  },
+  {
+    "source_name": "FWO_Unpaid_Entitlements",
+    "filename": "unpaid_entitlements.pdf",
+    "status": "failed",
+    "error": "404 Client Error: Not Found for url: https://www.fairwork.gov.au/documents-and-publications/fact-sheets-and-templates/fact-sheets/entitlements/unpaid-entitlements"
+  },
+  {
+    "source_name": "Awards_Summary",
+    "filename": "awards_summary.csv",
+    "status": "downloaded",
+    "checksum": "2b20ce37781fd6df1ce99f1e27f94c99003be6cf32ff6e4271a9e9bd25c9f254",
+    "size_kb": 408.3037109375,
+    "downloaded_at": "2026-07-21T13:33:22.832756"
+  }
+]

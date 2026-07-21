@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "redundancy-ai"
+version = "0.1.0"
+description = "Open-source RAG chatbot for Australian redundancy entitlements"
+authors = [{name = "RedundancyAI Contributors"}]
+license = {text = "Apache-2.0"}
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "langchain>=0.1.0",
+    "langchain-community>=0.0.28",
+    "chromadb>=0.4.0",
+    "sentence-transformers>=2.2.0",
+    "pypdf>=4.0.0",
+    "beautifulsoup4>=4.12.0",
+    "streamlit>=1.28.0",
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.5.0",
+    "requests>=2.31.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-mock>=3.12.0",
+    "black>=23.12.0",
+    "ruff>=0.1.0",
+    "mypy>=1.7.0",
+    "pytest-cov>=4.1.0",
+]
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
