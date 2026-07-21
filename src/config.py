@@ -36,9 +36,9 @@ CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "100"))
 RETRIEVAL_K = int(os.getenv("RETRIEVAL_K", "8"))
 RERANK_K = int(os.getenv("RERANK_K", "3"))
 
-# Confidence Gating Configuration
-CONFIDENCE_THRESHOLD = float(os.getenv("CONFIDENCE_THRESHOLD", "0.4"))
-MIN_SIMILARITY_SCORE = float(os.getenv("MIN_SIMILARITY_SCORE", "0.3"))
+# Confidence Gating Configuration (tuned via Phase 6 calibration)
+CONFIDENCE_THRESHOLD = float(os.getenv("CONFIDENCE_THRESHOLD", "0.25"))
+MIN_SIMILARITY_SCORE = float(os.getenv("MIN_SIMILARITY_SCORE", "0.25"))
 
 # Logging Configuration
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")

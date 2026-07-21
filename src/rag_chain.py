@@ -105,7 +105,7 @@ class RAGChain:
             List of Document objects with metadata
         """
         logger.debug(f"Retrieving {self.retrieval_k} chunks for question: {question}")
-        chunks = self.vectorstore.similarity_search_with_scores(question, k=self.retrieval_k)
+        chunks = self.vectorstore.similarity_search_with_score(question, k=self.retrieval_k)
 
         # Extract chunks and scores
         results = []
